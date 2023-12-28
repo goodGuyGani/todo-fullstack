@@ -6,6 +6,8 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { setTaskToDone } from "@/actions/task";
 import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
+import { TrashIcon } from "@radix-ui/react-icons";
 
 function getExpirationColor(expiresAt: Date) {
   const days = Math.floor(expiresAt.getTime() - Date.now()) / 1000 / 60 / 60;
