@@ -10,6 +10,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id Int @id @default(autoincrement())
+  email String
+  firstName String
+  lastName String
+  password String
+  createdAt DateTime @default(now())
+
+  @@unique([email, firstName, lastName])
+}
+
 model Collection {
   id Int @id @default(autoincrement())
   name String
