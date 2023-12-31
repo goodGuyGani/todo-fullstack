@@ -2,7 +2,6 @@
 import { createCollectionSchemaType } from "@/schema/createCollection";
 import { currentUser } from "@clerk/nextjs";
 import prisma from "@/lib/prisma";
-import { createUserSchemaType } from "@/schema/createUser";
 
 export async function createCollection(form: createCollectionSchemaType) {
   const user = await currentUser();
@@ -16,17 +15,6 @@ export async function createCollection(form: createCollectionSchemaType) {
       userId: user.id,
       color: form.color,
       name: form.name,
-    },
-  });
-}
-
-export async function createUser(form: createUserSchemaType) {
-  return await prisma.user.create({
-    data: {
-      email: form.email,
-      firstName: form.firstName,
-      lastName: form.lastName,
-      password: form.password,
     },
   });
 }

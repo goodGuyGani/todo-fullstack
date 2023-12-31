@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -24,9 +24,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { createUser } from "@/actions/collection";
+import { createUser } from "@/actions/user";
 import { toast } from "@/components/ui/use-toast";
-import { Textarea } from "@/components/ui/textarea";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 
@@ -37,6 +36,12 @@ function Page() {
   });
 
   const router = useRouter();
+  const [onLogin, setOnLogin] = useState(true);
+
+  const valueChangeClick = () => {
+    if (onLogin) return setOnLogin(false);
+    if (!onLogin) return setOnLogin(true);
+  };
 
   const onSubmit = async (data: createUserSchemaType) => {
     try {
@@ -46,7 +51,7 @@ function Page() {
         description: "Account created successfully",
       });
       form.reset();
-      window.location.reload();
+      setOnLogin(true);
     } catch (error) {
       toast({
         title: "Error",
@@ -56,10 +61,14 @@ function Page() {
     }
   };
   return (
-    <Tabs defaultValue="login" className="w-[400px]">
+    <Tabs value={onLogin ? "login" : "register"} className="w-[400px]">
       <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="login">Login</TabsTrigger>
-        <TabsTrigger value="register">Register</TabsTrigger>
+        <TabsTrigger value="login" onClick={valueChangeClick}>
+          Login
+        </TabsTrigger>
+        <TabsTrigger value="register" onClick={valueChangeClick}>
+          Register
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="login">
         <Card>
