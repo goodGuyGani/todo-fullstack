@@ -24,10 +24,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { createUser } from "@/actions/user";
+import { createUser, getUser } from "@/actions/user";
 import { toast } from "@/components/ui/use-toast";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
+import prisma from "@/lib/prisma";
+import { createCookie } from "@/actions/session";
+import { wait } from "@/lib/wait";
 
 function Page() {
   const form = useForm<createUserSchemaType>({
@@ -37,6 +40,10 @@ function Page() {
 
   const router = useRouter();
   const [onLogin, setOnLogin] = useState(true);
+
+  const [isEmail, setIsEmail] = useState("");
+  const [isPassword, setIsPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const valueChangeClick = () => {
     if (onLogin) return setOnLogin(false);
@@ -60,6 +67,56 @@ function Page() {
       });
     }
   };
+
+  async function toLogin() {
+    setIsLoading(true);
+
+    try {
+      const account = await getUser(isEmail, isPassword);
+      test();
+
+      if (account?.email === isEmail && account?.password === isPassword) {
+        createCookie(account.id.toString(), account.email, account.password);
+        toast({
+          title: "Success",
+          description: "Login successful",
+        });
+      } else {
+        toast({
+          title: "Failed",
+          description: "Login failed",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      toast({
+        title: "Error",
+        description: "An error occurred during login",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const handleEmailChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
+    // Update the state with the new input value
+    setIsEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
+    // Update the state with the new input value
+    setIsPassword(event.target.value);
+  };
+
+  function test() {
+    console.log(isEmail, isPassword);
+  }
   return (
     <Tabs value={onLogin ? "login" : "register"} className="w-[400px]">
       <TabsList className="grid w-full grid-cols-2">
@@ -79,21 +136,40 @@ function Page() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Label htmlFor="name">Email</Label>
-              <Input id="name" placeholder="Enter email" />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="current">Password</Label>
-              <Input
-                id="current"
-                type="password"
-                placeholder="Enter password"
-              />
-            </div>
+            <form>
+              <div className="space-y-1">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="name"
+                  placeholder="Enter Email"
+                  onChange={handleEmailChange}
+                  value={isEmail}
+                />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Enter Password"
+                  onChange={handlePasswordChange}
+                  value={isPassword}
+                />
+              </div>
+            </form>
           </CardContent>
           <CardFooter>
-            <Button>Save changes</Button>
+            <Button
+              disabled={isLoading}
+              className="w-full"
+              variant="outline"
+              onClick={toLogin}
+            >
+              Sign In
+              {isLoading && (
+                <ReloadIcon className="ml-2 h-4 w-4 animate-spin" />
+              )}
+            </Button>
           </CardFooter>
         </Card>
       </TabsContent>
@@ -186,7 +262,7 @@ function Page() {
               variant="outline"
               onClick={form.handleSubmit(onSubmit)}
             >
-              Confirm
+              Sign Up
               {form.formState.isSubmitting && (
                 <ReloadIcon className="animate-spin h-4 w-4 ml-2" />
               )}

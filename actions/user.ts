@@ -12,3 +12,12 @@ export async function createUser(form: createUserSchemaType) {
     },
   });
 }
+
+export async function getUser(email: string, password: string) {
+  return await prisma.user.findFirst({
+    where: {
+      email: email,
+      password: password,
+    },
+  });
+}
