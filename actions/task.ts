@@ -8,8 +8,8 @@ import { cookies } from "next/headers"
 export async function createTask(data: createTaskSchemaType) {
   const user = await cookies();
 
-  if (!user) {
-    throw new Error("user not found");
+  if (!user || !user.get('id')?.value) {
+    throw new Error("User or user ID not found");
   }
 
   const { content, expiresAt, collectionId } = data;
@@ -31,8 +31,8 @@ export async function createTask(data: createTaskSchemaType) {
 export async function setTaskToDone(id: number) {
   const user = await cookies();
 
-  if (!user) {
-    throw new Error("user not found");
+  if (!user || !user.get('id')?.value) {
+    throw new Error("User or user ID not found");
   }
 
   return await prisma.task.update({
@@ -49,8 +49,8 @@ export async function setTaskToDone(id: number) {
 export async function deleteTask(id: number){
   const user = await cookies();
 
-  if (!user) {
-    throw new Error("user not found");
+  if (!user || !user.get('id')?.value) {
+    throw new Error("User or user ID not found");
   }
 
   return await prisma.task.delete({

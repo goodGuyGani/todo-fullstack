@@ -6,8 +6,8 @@ import { cookies } from "next/headers"
 export async function createCollection(form: createCollectionSchemaType) {
   const user = await cookies();
 
-  if (!user) {
-    throw new Error("User not found");
+  if (!user || !user.get('id')?.value) {
+    throw new Error("User or user ID not found");
   }
 
   return await prisma.collection.create({
@@ -21,8 +21,8 @@ export async function createCollection(form: createCollectionSchemaType) {
 
 export async function deleteCollction(id: number) {
   const user = await cookies();
-  if (!user) {
-    throw new Error("User not found");
+  if (!user || !user.get('id')?.value) {
+    throw new Error("User or user ID not found");
   }
 
   return await prisma.collection.delete({
