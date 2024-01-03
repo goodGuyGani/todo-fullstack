@@ -1,7 +1,8 @@
-import { UserButton } from "@clerk/nextjs";
+
 import React from "react";
 import Logo from "./Logo";
 import ThemeSwitcher from "./ThemeSwitcher";
+import AvatarMenu from "./AvatarMenu";
 
 function NavBar() {
   return (
@@ -9,7 +10,7 @@ function NavBar() {
       <Logo />
       <div className="flex gap-4 items-center">
         <ThemeSwitcher />
-        <UserButton afterSignOutUrl="/" />
+        <AvatarMenu />
       </div>
     </nav>
   );

@@ -1,7 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
 import { Separator } from "@/components/ui/separator";
 import NavBar from "@/components/NavBar";
 import { ThemeProvider } from "@/providers/ThemeProvider";
@@ -21,7 +20,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
       <html
         lang="en"
         className={cn(inter.className, "dark")}
@@ -40,6 +38,5 @@ export default function RootLayout({
           </ThemeProvider>
         </body>
       </html>
-    </ClerkProvider>
   );
 }

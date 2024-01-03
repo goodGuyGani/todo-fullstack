@@ -45,6 +45,7 @@ function Page() {
   const [isPassword, setIsPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+
   const valueChangeClick = () => {
     if (onLogin) return setOnLogin(false);
     if (!onLogin) return setOnLogin(true);
@@ -73,18 +74,19 @@ function Page() {
 
     try {
       const account = await getUser(isEmail, isPassword);
-      test();
 
       if (account?.email === isEmail && account?.password === isPassword) {
-        createCookie(account.id.toString(), account.email, account.password);
+        createCookie(account.id.toString(), account.email, `${account.firstName} ${account.lastName}`);
         toast({
           title: "Success",
           description: "Login successful",
         });
+        router.push("/");
+        router.refresh();
       } else {
         toast({
           title: "Failed",
-          description: "Login failed",
+          description: "Incorrent Email and Password",
           variant: "destructive",
         });
       }

@@ -1,12 +1,13 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { wait } from "@/lib/wait";
-import { currentUser } from "@clerk/nextjs";
 import { Suspense } from "react";
 import prisma from "@/lib/prisma";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import SadFace from "@/components/icons/SadFace";
 import CreateCollectionBtn from "@/components/CreateCollectionBtn";
 import CollectionCard from "@/components/CollectionCard";
+import { cookies } from "next/headers"
+import { getCookie } from "@/actions/session"
 
 export default async function Home() {
   return (
@@ -22,14 +23,16 @@ export default async function Home() {
 }
 
 async function WelcomeMsg() {
-  const user = await currentUser();
+
+  const user = await getCookie();
+  console.log(user.get('name'))
   if (!user) {
     return <div>Error</div>;
   }
   return (
     <div className="flex w-full mb-12">
       <h1 className="text-4xl font-bold">
-        Welcome, <br /> {user.firstName} {user.lastName}
+        Welcome, <br /> {user.get('name')?.value}
       </h1>
     </div>
   );
@@ -47,13 +50,13 @@ function WelcomeMsgFallback() {
 }
 
 async function CollectionList() {
-  const user = await currentUser();
+  const user = await getCookie();
   const collections = await prisma.collection.findMany({
     include: {
       tasks: true,
     },
     where: {
-      userId: user?.id,
+      userId: user.get('id')?.value,
     },
   });
   if (collections.length === 0) {

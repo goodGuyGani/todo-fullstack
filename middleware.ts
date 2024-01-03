@@ -1,10 +1,16 @@
-import { authMiddleware } from "@clerk/nextjs";
+//middleware.ts
 
-// This example protects all routes including api/trpc routes
-// Please edit this to allow other routes to be public as needed.
-// See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your Middleware
-export default authMiddleware({});
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export const config = {
-  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
-};
+const protectedRoutes = ["/"];
+
+export default function middleware(req: NextRequest) {
+  let verify = req.cookies.get("name");
+  let url = req.url;
+
+  if (!verify && protectedRoutes.includes(req.nextUrl.pathname)) {
+    const absoluteURL = new URL("/login-register", req.nextUrl.origin);
+    return NextResponse.redirect(absoluteURL.toString());
+  }
+}

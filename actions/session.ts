@@ -28,5 +28,5 @@ export async function createCookie(
 }
 
 export async function getCookie() {
-  return cookies().getAll();
+  return cookies();
 }

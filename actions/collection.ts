@@ -1,10 +1,10 @@
 "use server";
 import { createCollectionSchemaType } from "@/schema/createCollection";
-import { currentUser } from "@clerk/nextjs";
 import prisma from "@/lib/prisma";
+import { cookies } from "next/headers"
 
 export async function createCollection(form: createCollectionSchemaType) {
-  const user = await currentUser();
+  const user = await cookies();
 
   if (!user) {
     throw new Error("User not found");
@@ -12,7 +12,7 @@ export async function createCollection(form: createCollectionSchemaType) {
 
   return await prisma.collection.create({
     data: {
-      userId: user.id,
+      userId: user.get('id').value,
       color: form.color,
       name: form.name,
     },
@@ -20,7 +20,7 @@ export async function createCollection(form: createCollectionSchemaType) {
 }
 
 export async function deleteCollction(id: number) {
-  const user = await currentUser();
+  const user = await cookies();
   if (!user) {
     throw new Error("User not found");
   }
