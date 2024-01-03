@@ -45,7 +45,6 @@ function Page() {
   const [isPassword, setIsPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-
   const valueChangeClick = () => {
     if (onLogin) return setOnLogin(false);
     if (!onLogin) return setOnLogin(true);
@@ -76,13 +75,17 @@ function Page() {
       const account = await getUser(isEmail, isPassword);
 
       if (account?.email === isEmail && account?.password === isPassword) {
-        createCookie(account.id.toString(), account.email, `${account.firstName} ${account.lastName}`);
+        createCookie(
+          account.id.toString(),
+          account.email,
+          `${account.firstName} ${account.lastName}`
+        );
+        router.push("/");
+        router.refresh();
         toast({
           title: "Success",
           description: "Login successful",
         });
-        router.push("/");
-        router.refresh();
       } else {
         toast({
           title: "Failed",
