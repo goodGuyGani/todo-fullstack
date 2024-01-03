@@ -80,7 +80,7 @@ function Page() {
           account.email,
           `${account.firstName} ${account.lastName}`
         );
-        router.push("/");
+        router.prefetch("/");
         router.refresh();
         toast({
           title: "Success",
