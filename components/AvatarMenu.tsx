@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { getCookie, deleteCookie } from "@/actions/session";
+import Logout from "@/components/Logout"
 
 function getInitials(fullName: string): string {
   const names = fullName.split(" ");
@@ -44,11 +45,7 @@ export default async function AvatarMenu() {
       <DropdownMenuContent className="w-30">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Edit Profile</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          Log out
-        </DropdownMenuItem>
+        <Logout />
       </DropdownMenuContent>
     </DropdownMenu>
   );
