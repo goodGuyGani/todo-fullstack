@@ -25,7 +25,6 @@ export default async function Home() {
 async function WelcomeMsg() {
 
   const user = await getCookie();
-  console.log(user.get('name'))
   if (!user) {
     return <div>Error</div>;
   }

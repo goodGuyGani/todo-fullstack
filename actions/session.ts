@@ -30,3 +30,7 @@ export async function createCookie(
 export async function getCookie() {
   return cookies();
 }
+
+export async function deleteCookie(){
+  cookies().delete('name')
+}

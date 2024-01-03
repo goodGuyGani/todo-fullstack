@@ -1,24 +1,55 @@
 import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { getCookie } from "@/actions/session";
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { getCookie, deleteCookie } from "@/actions/session";
 
-export default async function AvatarMenu(){
-	const user = await getCookie();
-	console.log(user);
+function getInitials(fullName: string): string {
+  const names = fullName.split(" ");
+  const firstNameInitial = names[0][0].toUpperCase();
+  const lastNameInitial = names.length > 1 ? names[names.length - 1][0].toUpperCase() : "";
+  return `${firstNameInitial}${lastNameInitial}`;
+}
 
-	const name = user.get('name')?.value;
-	function getInitials(fullName: string): string{
-		const names = fullName.split(" ");
-		const firstNameInitial = names[0][0].toUpperCase();
-		const lastNameInitial = names.length > 1 ? names[names.length - 1][0].toUpperCase() : "";
-		return`${firstNameInitial}${lastNameInitial}`;
-	}
+export default async function AvatarMenu() {
+  const user = await getCookie();
 
-	return(
-		<Avatar>
-  			<AvatarImage src="" />
-  			<AvatarFallback>{getInitials(name)}</AvatarFallback>
-		</Avatar>
+  const name = user?.get('name')?.value;
+  if (!name) {
+    // Handle the case when user or user.get('name') is undefined
+    console.error("User or user name is undefined");
+  }
 
-	)
+  const onLogout = async () => {
+  	await deleteCookie();
+  }
+
+  return name && (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" className="rounded-full w-10 h-10">{getInitials(name)}</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-30">
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>Edit Profile</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          Log out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 }
