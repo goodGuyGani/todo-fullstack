@@ -12,7 +12,7 @@ export async function createCollection(form: createCollectionSchemaType) {
 
   return await prisma.collection.create({
     data: {
-      userId: user.get('id')?.value,
+      userId: user.get('id')!.value,
       color: form.color,
       name: form.name,
     },

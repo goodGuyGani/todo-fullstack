@@ -16,7 +16,7 @@ export async function createTask(data: createTaskSchemaType) {
 
   return await prisma.task.create({
     data: {
-      userId: user.get('id')?.value,
+      userId: user.get('id')!.value,
       content,
       expiresAt,
       Collection: {
@@ -38,7 +38,7 @@ export async function setTaskToDone(id: number) {
   return await prisma.task.update({
     where: {
       id: id,
-      userId: user.get('id')?.value,
+      userId: user.get('id')!.value,
     },
     data: {
       done: true,
@@ -56,7 +56,7 @@ export async function deleteTask(id: number){
   return await prisma.task.delete({
     where: {
       id: id,
-      userId: user.get('id')?.value,
+      userId: user.get('id')!.value,
     }
   });
 } 
