@@ -3,8 +3,7 @@
 import prisma from "@/lib/prisma";
 import { createTaskSchemaType } from "@/schema/createTask";
 
-export async function createTask(data: createTaskSchemaType, id: number) {
-
+export async function createTask(data: createTaskSchemaType, id: any) {
   const { content, expiresAt, collectionId } = data;
 
   return await prisma.task.create({
@@ -21,8 +20,7 @@ export async function createTask(data: createTaskSchemaType, id: number) {
   });
 }
 
-export async function setTaskToDone(id: number, userId: number) {
-
+export async function setTaskToDone(id: number, userId: any) {
   return await prisma.task.update({
     where: {
       id: id,
@@ -34,12 +32,11 @@ export async function setTaskToDone(id: number, userId: number) {
   });
 }
 
-export async function deleteTask(id: number, userId:number){
-
+export async function deleteTask(id: number, userId: any) {
   return await prisma.task.delete({
     where: {
       id: id,
       userId: userId,
-    }
+    },
   });
-} 
+}
