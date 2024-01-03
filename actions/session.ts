@@ -32,9 +32,9 @@ export async function getCookie() {
 }
 
 export async function getIdCookie() {
-  return await cookies().get('id').value;
+  return await cookies().get("id")?.value;
 }
 
-export async function deleteCookie(){
-  await cookies().delete('name')
+export async function deleteCookie() {
+  await cookies().delete("name");
 }

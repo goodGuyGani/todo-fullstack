@@ -1,7 +1,6 @@
 "use server";
 import { createCollectionSchemaType } from "@/schema/createCollection";
 import prisma from "@/lib/prisma";
-import { cookies } from "next/headers";
 
 export async function createCollection(
   form: createCollectionSchemaType,
