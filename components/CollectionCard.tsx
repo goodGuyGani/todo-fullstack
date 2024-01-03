@@ -23,7 +23,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
-import { deleteCollction } from "@/actions/collection";
+import { deleteCollection } from "@/actions/collection";
 import { toast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
 import CreateTaskDialog from "./CreateTaskDialog";
@@ -47,7 +47,7 @@ function CollectionCard({ collection }: Props) {
 
   const removeCollection = async () => {
     try {
-      await deleteCollction(collection.id);
+      await deleteCollection(collection.id);
       toast({
         title: "Success",
         description: "Collection deleted successfully",

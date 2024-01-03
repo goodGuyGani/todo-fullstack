@@ -32,6 +32,7 @@ import { format } from "date-fns";
 import { createTask } from "@/actions/task";
 import { toast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
+import { getIdCookie } from "@/actions/session";
 
 interface Props {
   open: boolean;
@@ -58,7 +59,8 @@ function CreateTaskDialog({ open, collection, setOpen }: Props) {
 
   const onSubmit = async (data: createTaskSchemaType) => {
     try {
-      await createTask(data);
+      const userId = await getIdCookie();
+      await createTask(data, userId);
       toast({
         title: "Success",
         description: "Task created successfully",

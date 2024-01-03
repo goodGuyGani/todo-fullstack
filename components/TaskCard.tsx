@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { toast } from "./ui/use-toast";
+import { getIdCookie } from "@/actions/session";
 
 function getExpirationColor(expiresAt: Date) {
   const days = Math.floor(expiresAt.getTime() - Date.now()) / 1000 / 60 / 60;
@@ -34,7 +35,8 @@ function TaskCard({ task }: { task: Task }) {
 
   async function onDelete(id: number){
     try {
-      await deleteTask(id);
+      const userId = await getIdCookie();
+      await deleteTask(id, userId);
       toast({
         title: "Success",
         description: "Task deleted successfully",
@@ -57,7 +59,8 @@ function TaskCard({ task }: { task: Task }) {
         checked={task.done}
         onCheckedChange={() => {
           startTransition(async () => {
-            await setTaskToDone(task.id);
+            const userId = await getIdCookie();
+            await setTaskToDone(task.id, userId);
             router.refresh();
           });
         }}

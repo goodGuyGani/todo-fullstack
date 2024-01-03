@@ -37,6 +37,7 @@ import { createCollection } from "@/actions/collection";
 import { toast } from "./ui/use-toast";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
+import { getIdCookie } from "@/actions/session";
 
 interface Props {
   open: boolean;
@@ -52,27 +53,33 @@ function CreateCollectionSheet({ open, onOpenChange }: Props) {
   const router = useRouter();
 
   const onSubmit = async (data: createCollectionSchemaType) => {
-    try {
-      await createCollection(data);
+  try {
+    // Use await to wait for the Promise to resolve
+    const userId = await getIdCookie();
 
-      //close the sheet
-      openChangeWrapper(false);
-      router.refresh();
+    // Now you can use the updated value of userId
+    await createCollection(data, userId);
 
-      toast({
-        title: "Success",
-        description: "Collection created successfully",
-      });
-    } catch (e: any) {
-      //show toast
-      toast({
-        title: "Error",
-        description: "Something went wrong, Please try again later",
-        variant: "destructive",
-      });
-      console.log("Error while creating collection", e);
-    }
-  };
+    // Close the sheet
+    openChangeWrapper(false);
+    router.refresh();
+
+    toast({
+      title: "Success",
+      description: "Collection created successfully",
+    });
+  } catch (e: any) {
+    // Show toast for errors
+    toast({
+      title: "Error",
+      description: "Something went wrong, Please try again later",
+      variant: "destructive",
+    });
+
+    console.log("Error while creating collection", e);
+  }
+};
+
 
   const openChangeWrapper = (open: boolean) => {
     form.reset();

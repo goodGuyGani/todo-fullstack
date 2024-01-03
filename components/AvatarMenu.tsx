@@ -14,7 +14,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { getCookie, deleteCookie } from "@/actions/session";
+import { getCookie } from "@/actions/session";
 import Logout from "@/components/Logout"
 
 function getInitials(fullName: string): string {
@@ -31,10 +31,6 @@ export default async function AvatarMenu() {
   if (!name) {
     // Handle the case when user or user.get('name') is undefined
     console.error("User or user name is undefined");
-  }
-
-  const onLogout = async () => {
-  	await deleteCookie();
   }
 
   return name && (

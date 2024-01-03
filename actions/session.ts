@@ -28,9 +28,13 @@ export async function createCookie(
 }
 
 export async function getCookie() {
-  return cookies();
+  return await cookies();
+}
+
+export async function getIdCookie() {
+  return await cookies().get('id').value;
 }
 
 export async function deleteCookie(){
-  cookies().delete('name')
+  await cookies().delete('name')
 }
